@@ -73,6 +73,17 @@ public class WebLauncherActivity extends Activity {
     	}
     	    
 	private void reloadPage() {
-		myWebView.loadUrl("http://axe/stream");
+		myWebView.loadUrl(Globals.Server_URL);
 	}
+	
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        MainActivity.loadPreferences(this);
+        
+        reloadPage();
+    }
+
 }

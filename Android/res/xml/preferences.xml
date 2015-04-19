@@ -8,12 +8,17 @@
                         android:summary="Auto connect to server"
                         android:key="autoconnect" />
                 <ListPreference
-                        android:title="Select Server"
+                        android:title="Select Mouse Server"
                         android:summary="Choose default server to connect to"
                         android:key="server"
                         android:defaultValue="First"
                         android:entries="@array/server_pref"
                         android:entryValues="@array/server_pref" />
+                 <EditTextPreference
+					    android:inputType="textUri"
+					    android:key="server_url"
+					    android:summary="@string/server_url_summary"
+					    android:title="@string/server_url_title" />
         </PreferenceCategory>
         <PreferenceCategory android:title="Input">
             <com.rekap.remote.SeekBarPreference android:key="sensitivity"
