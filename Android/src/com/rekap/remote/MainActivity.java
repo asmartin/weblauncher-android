@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -66,21 +65,20 @@ public class MainActivity extends Activity {
     private KeypadHandler keypadHandler = new KeypadHandler();
     private RelativeLayout layout;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+    public static void showSettings(final Activity a) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(a);
         builder.setTitle(R.string.app_name)
                .setItems(R.array.options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch(which) {
                 case 0:
-                    startActivity(new Intent(getBaseContext(), Preferences.class));
+                    a.startActivity(new Intent(a.getBaseContext(), Preferences.class));
                     break;
 
                 case 1:
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                    imm.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
+                    imm.showSoftInput((RelativeLayout)a.findViewById(R.id.background), InputMethodManager.SHOW_FORCED);
                     break;
 
                 case 2:
@@ -90,6 +88,15 @@ public class MainActivity extends Activity {
             }
         });
         builder.show();
+    }
+    
+    // use onPrepareOptionsMenu instead of onCreateOptionsMenu because we need to recreate the menu
+    // each time the button is pressed (as opposed to when this is used with the Action Bar, because
+    // in that case the menu always exists after it is initially created
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+    	showSettings(this);
+    	invalidateOptionsMenu();
         return true;
     }
     

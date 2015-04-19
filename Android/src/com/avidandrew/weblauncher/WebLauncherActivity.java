@@ -65,6 +65,8 @@ public class WebLauncherActivity extends Activity {
     	    case R.id.reload:
     	      reloadPage();
     	      return true;
+    	    case R.string.prefs:
+    	      MainActivity.showSettings(this);
     	    default:
     	      return super.onOptionsItemSelected(item);
     	  }

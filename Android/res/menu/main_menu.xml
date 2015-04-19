@@ -2,4 +2,7 @@
     <item
         android:id="@+id/reload"
         android:title="@string/reload_title"/>
+    <item
+        android:id="@string/prefs"
+        android:title="@string/prefs"/>
 </menu>
