@@ -1,6 +1,7 @@
 <resources>
 
-    <string name="app_name">Simple Remote</string>
+    <string name="app_name">Web Launcher</string>
+    <string name="reload_title">Refresh</string>
     <string name="blank"></string>
     <string name="prefs">Preferences</string>
     <string-array name="server_pref">

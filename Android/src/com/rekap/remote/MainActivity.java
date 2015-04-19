@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.avidandrew.weblauncher.*;
 import com.rekap.network.NetInput;
 import com.rekap.network.Network;
 
@@ -35,28 +38,7 @@ public class MainActivity extends Activity {
 
     OnClickListener menuEvent = new OnClickListener() {
         public void onClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle(R.string.app_name)
-                   .setItems(R.array.options, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    switch(which) {
-                    case 0:
-                        startActivity(new Intent(getBaseContext(), Preferences.class));
-                        break;
-
-                    case 1:
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                        imm.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
-                        break;
-
-                    case 2:
-                        Network.Connect(Globals.Server);
-                        break;
-                    }
-                }
-            });
-            builder.show();
+        	startActivity(new Intent(getBaseContext(), WebLauncherActivity.class));
         }
     };
 
@@ -85,8 +67,36 @@ public class MainActivity extends Activity {
     private RelativeLayout layout;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.app_name)
+               .setItems(R.array.options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which) {
+                case 0:
+                    startActivity(new Intent(getBaseContext(), Preferences.class));
+                    break;
+
+                case 1:
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    imm.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
+                    break;
+
+                case 2:
+                    Network.Connect(Globals.Server);
+                    break;
+                }
+            }
+        });
+        builder.show();
+        return true;
+    }
+    
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setTheme(R.style.AppTheme);
         setContentView(R.layout.main);
         context = this;
 
