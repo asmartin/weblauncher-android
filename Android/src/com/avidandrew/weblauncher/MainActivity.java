@@ -1,7 +1,7 @@
 package com.avidandrew.weblauncher;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,7 +19,7 @@ import com.rekap.remote.*;
  *
  * @see SystemUiHider
  */
-public class WebLauncherActivity extends Activity {
+public class MainActivity extends Activity {
 	private WebView myWebView = null;
 	private final String APP = "Web Launcher";
     @Override
@@ -28,10 +28,7 @@ public class WebLauncherActivity extends Activity {
         
         setContentView(R.layout.activity_weblauncher);
         
-        // show back button
-        ActionBar actionBar = getActionBar();
-
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        MouseActivity.loadPreferences(this);
         
         myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
@@ -39,6 +36,14 @@ public class WebLauncherActivity extends Activity {
         webSettings.setUserAgentString(webSettings.getUserAgentString() + APP);
         reloadPage();
         myWebView.setWebViewClient(new WebViewClient());
+        
+        if (Globals.FirstRun) {
+            new AlertDialog.Builder(this)
+                .setMessage(R.string.firstruntext)
+                .setNeutralButton("OK", null)
+                .show();
+            Globals.FirstRun = false;
+        }
     }
     
     @Override
@@ -50,23 +55,20 @@ public class WebLauncherActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.main_activity_actions, menu);
         return true;
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
     	  switch (item.getItemId()) {
-    	    case android.R.id.home:
-              // app icon in action bar clicked; go home
-              Intent intent = new Intent(this, MainActivity.class);
-              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-              startActivity(intent);
-              return true;
+    	    case R.id.action_mouse:
+    	      startActivity(new Intent(getBaseContext(), MouseActivity.class));
+    	      return true;
     	    case R.id.reload:
     	      reloadPage();
     	      return true;
-    	    case R.string.prefs:
-    	      MainActivity.showSettings(this);
+    	    case R.id.action_settings:
+    	      MouseActivity.showSettings(this);
     	    default:
     	      return super.onOptionsItemSelected(item);
     	  }
@@ -81,8 +83,7 @@ public class WebLauncherActivity extends Activity {
     {
         super.onResume();
 
-        MainActivity.loadPreferences(this);
-        
+        MouseActivity.loadPreferences(this);
         reloadPage();
     }
 

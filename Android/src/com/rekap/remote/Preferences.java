@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 
+import com.avidandrew.weblauncher.R;
 import com.rekap.network.Network;
 
 public class Preferences extends PreferenceActivity {

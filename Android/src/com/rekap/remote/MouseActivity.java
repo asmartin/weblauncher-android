@@ -21,7 +21,7 @@ import com.avidandrew.weblauncher.*;
 import com.rekap.network.NetInput;
 import com.rekap.network.Network;
 
-public class MainActivity extends Activity {
+public class MouseActivity extends Activity {
 
     OnClickListener leftEvent = new OnClickListener() {
         public void onClick(View v) {
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 
     OnClickListener menuEvent = new OnClickListener() {
         public void onClick(View v) {
-        	startActivity(new Intent(getBaseContext(), WebLauncherActivity.class));
+        	finish();	// go back to the main activity
         }
     };
 
@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
         layout = (RelativeLayout)findViewById(R.id.background);
         final Button leftClick = (Button)findViewById(R.id.leftClick);
         final Button rightClick = (Button)findViewById(R.id.rightClick);
-        final ImageButton menuClick = (ImageButton)findViewById(R.id.menuButton);
+        final ImageButton menuClick = (ImageButton)findViewById(R.id.backButton);
 
         layout.setOnTouchListener(new TouchpadHandler());
         layout.setOnKeyListener(keypadHandler);
@@ -120,14 +120,6 @@ public class MainActivity extends Activity {
 
         loadPreferences(this);
         Network.LocatorStart();
-
-        if (Globals.FirstRun) {
-            new AlertDialog.Builder(this)
-                .setMessage(R.string.firstruntext)
-                .setNeutralButton("OK", null)
-                .show();
-            Globals.FirstRun = false;
-        }
     }
 
     @Override

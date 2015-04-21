@@ -8,7 +8,7 @@
     android:focusableInTouchMode="true" >
 
     <ImageButton
-        android:id="@+id/menuButton"
+        android:id="@+id/backButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -16,7 +16,8 @@
         android:background="@null"
         android:contentDescription="@string/menu_description"
         android:scaleType="fitXY"
-        android:src="@android:drawable/ic_menu_more" />
+        android:scaleX="-1"
+        android:src="@android:drawable/ic_menu_directions" />
 
     <Button
         android:id="@+id/leftClick"
@@ -24,7 +25,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/menuButton"
+        android:layout_toLeftOf="@+id/backButton"
         android:focusable="false"
         android:text="@string/blank" />
 
@@ -34,7 +35,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/menuButton"
+        android:layout_toRightOf="@+id/backButton"
         android:focusable="false"
         android:text="@string/blank" />
 
