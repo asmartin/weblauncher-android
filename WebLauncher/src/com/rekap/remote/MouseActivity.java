@@ -37,7 +37,8 @@ public class MouseActivity extends Activity {
 
     OnClickListener menuEvent = new OnClickListener() {
         public void onClick(View v) {
-        	finish();	// go back to the main activity
+        	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        	imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
         }
     };
 
@@ -110,7 +111,7 @@ public class MouseActivity extends Activity {
         layout = (RelativeLayout)findViewById(R.id.background);
         final Button leftClick = (Button)findViewById(R.id.leftClick);
         final Button rightClick = (Button)findViewById(R.id.rightClick);
-        final ImageButton menuClick = (ImageButton)findViewById(R.id.backButton);
+        final ImageButton menuClick = (ImageButton)findViewById(R.id.keyboardButton);
 
         layout.setOnTouchListener(new TouchpadHandler());
         layout.setOnKeyListener(keypadHandler);
