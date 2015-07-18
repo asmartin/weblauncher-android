@@ -133,13 +133,16 @@ public class MouseActivity extends Activity {
 
     public static void loadPreferences(Activity a)
     {
+    	// attempt to detect servers again
+    	Network.LocatorStart();
+    	
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(a.getBaseContext());
 
         Globals.AutoConnect = prefs.getBoolean(Globals.AUTOCONNECT, true);
         Globals.FirstRun = prefs.getBoolean(Globals.FIRSTRUN, true);
         Globals.Sensitivity = ((float)(prefs.getInt(Globals.SENSITIVITY, 50) + 20)) / 100;
         Globals.Server = prefs.getString(Globals.SERVER, "First");
-        Globals.Server_URL = prefs.getString(Globals.SERVER_URL_ID, Globals.Server_URL_Default);
+        Globals.Server_URL = prefs.getString(Globals.SERVER_URL, Globals.Server_URL_Default);
 
         if (Globals.FirstRun) {
             SharedPreferences.Editor editor = prefs.edit();

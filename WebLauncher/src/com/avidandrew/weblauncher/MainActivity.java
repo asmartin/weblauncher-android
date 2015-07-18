@@ -75,7 +75,19 @@ public class MainActivity extends Activity {
     	}
     	    
 	private void reloadPage() {
-		myWebView.loadUrl(Globals.Server_URL);
+		String url = "";
+		
+		if (!Globals.Server_URL.equals("")) {
+		//	url = Globals.Server_URL;
+			String custom = Globals.Server_URL;
+			url = "http://" + custom.replaceAll("http://", "");
+		} else {
+			// load the same hostname as the auto-detected viewer
+			url = "http://" + Globals.Server;
+		}
+		
+		// load the URL
+		myWebView.loadUrl(url);
 	}
 	
     @Override

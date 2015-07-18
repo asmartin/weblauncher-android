@@ -8,8 +8,8 @@
                         android:summary="Auto connect to server"
                         android:key="autoconnect" />
                 <ListPreference
-                        android:title="Select Mouse Server"
-                        android:summary="Choose default server to connect to"
+                        android:title="Select Viewer"
+                        android:summary="Choose default viewer to connect to"
                         android:key="server"
                         android:defaultValue="First"
                         android:entries="@array/server_pref"
@@ -17,6 +17,7 @@
                  <EditTextPreference
 					    android:inputType="textUri"
 					    android:key="server_url"
+					    android:defaultValue=""
 					    android:summary="@string/server_url_summary"
 					    android:title="@string/server_url_title" />
         </PreferenceCategory>

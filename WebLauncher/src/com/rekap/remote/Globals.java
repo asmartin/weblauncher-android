@@ -6,7 +6,7 @@ public class Globals {
 	public static String connectedHost = "First";
 	
 	//increment firstrun with each app release
-	public static final String AUTOCONNECT = "autoconnect", SERVER = "server", SERVER_URL_ID = "server_url",
+	public static final String AUTOCONNECT = "autoconnect", SERVER = "server", SERVER_URL = "server_url",
 			SENSITIVITY = "sensitivity", FIRSTRUN = "firstrun1"; 
 	
 	public static boolean AutoConnect, FirstRun;

@@ -9,8 +9,8 @@
         <item >First</item>
     </string-array>
         <string name="reconnect">Reconnect</string>
-        <string name="server_url_title">Web Launcher Server URL</string>
-        <string name="server_url_summary">Enter to the URL where you installed the Web Launcher server application</string>
+        <string name="server_url_title">Custom Server URL</string>
+        <string name="server_url_summary">Enter a custom location for the Web Launcher server (if it is not running on the viewer). Otherwise, leave this blank to auto-detect</string>
         <string name="TouchBackground">One finger tap: Left-click\nTwo finger tap: Right-click\nTwo finger drag: Scroll\nLong press: Drag</string>
         <string name="firstruntext">Welcome to Web Launcher! To finish the setup process, visit http://avidandrew.com/weblauncher on your computer to install and configure the server and viewer components.</string>
         <string-array name="options">
