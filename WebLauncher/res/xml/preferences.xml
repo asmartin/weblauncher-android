@@ -5,7 +5,7 @@
                 <CheckBoxPreference
                         android:title="Auto-Connect"
                         android:defaultValue="true"
-                        android:summary="Auto connect to server"
+                        android:summary="Attempt to auto-connect to viewer"
                         android:key="autoconnect" />
                 <ListPreference
                         android:title="Select Viewer"
@@ -15,11 +15,11 @@
                         android:entries="@array/server_pref"
                         android:entryValues="@array/server_pref" />
                  <EditTextPreference
-					    android:inputType="textUri"
+                		android:title="Custom Server URL"
+						android:summary="Enter a custom location for the weblauncher-server component (e.g if hosted on another computer on the network). Otherwise, leave this blank to auto-detect"	    
+                 		android:inputType="textUri"
 					    android:key="server_url"
-					    android:defaultValue=""
-					    android:summary="@string/server_url_summary"
-					    android:title="@string/server_url_title" />
+					    android:defaultValue="" />
         </PreferenceCategory>
         <PreferenceCategory android:title="Input">
             <com.rekap.remote.SeekBarPreference android:key="sensitivity"

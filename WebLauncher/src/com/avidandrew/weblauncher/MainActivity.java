@@ -59,21 +59,26 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	  switch (item.getItemId()) {
     	    case R.id.action_mouse:
     	      startActivity(new Intent(getBaseContext(), MouseActivity.class));
     	      return true;
     	    case R.id.reload:
+    	      // since we're on the WebView page, reload the page
     	      reloadPage();
     	      return true;
     	    case R.id.action_settings:
-    	      MouseActivity.showSettings(this);
+    	    	startActivity(new Intent(getBaseContext(), Preferences.class));
     	    default:
     	      return super.onOptionsItemSelected(item);
     	  }
     	}
-    	    
+    
+    /**
+     * Reload the webpage
+     */
 	private void reloadPage() {
 		String url = "";
 		

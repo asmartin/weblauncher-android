@@ -14,7 +14,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@null"
-        android:contentDescription="@string/menu_description"
         android:scaleType="fitXY"
         android:src="@android:drawable/ic_menu_sort_alphabetically" />
 

@@ -3,21 +3,11 @@
     <string name="app_name">Web Launcher</string>
     <string name="reload_title">Refresh</string>
     <string name="blank"></string>
-    <string name="prefs">Preferences</string>
+    <string name="prefs">Settings</string>
     <string name="action_mouse">Mouse</string>
     <string-array name="server_pref">
         <item >First</item>
     </string-array>
-        <string name="reconnect">Reconnect</string>
-        <string name="server_url_title">Custom Server URL</string>
-        <string name="server_url_summary">Enter a custom location for the Web Launcher server (if it is not running on the viewer). Otherwise, leave this blank to auto-detect</string>
         <string name="TouchBackground">One finger tap: Left-click\nTwo finger tap: Right-click\nTwo finger drag: Scroll\nLong press: Drag</string>
         <string name="firstruntext">Welcome to Web Launcher! To finish the setup process, visit http://avidandrew.com/weblauncher on your computer to install and configure the server and viewer components.</string>
-        <string-array name="options">
-            <item >Settings</item>
-            <item >Keyboard</item>
-            <item >Reconnect</item>
-        </string-array>
-        <string name="menu_description">Main Menu</string>
-
 </resources>

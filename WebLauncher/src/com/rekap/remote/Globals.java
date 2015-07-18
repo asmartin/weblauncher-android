@@ -10,7 +10,7 @@ public class Globals {
 			SENSITIVITY = "sensitivity", FIRSTRUN = "firstrun1"; 
 	
 	public static boolean AutoConnect, FirstRun;
-	public static String Server;		// mouse server
-	public static String Server_URL;	// WebLauncher server
+	public static String Server;		// weblauncher-viewer (where mouse server is running)
+	public static String Server_URL;	// weblauncher-server (where links webpage is hosted)
 	public static float Sensitivity;
 }

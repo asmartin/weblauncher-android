@@ -1,15 +1,15 @@
 package com.rekap.remote;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -23,18 +23,27 @@ import com.rekap.network.Network;
 
 public class MouseActivity extends Activity {
 
+	/**
+	 * Left mouse click
+	 */
     OnClickListener leftEvent = new OnClickListener() {
         public void onClick(View v) {
             NetInput.LeftClick();
         }
     };
 
+    /**
+     * Right mouse click
+     */
     OnClickListener rightEvent = new OnClickListener() {
         public void onClick(View v) {
             NetInput.RightClick();
         }
     };
 
+    /**
+     * Bring up the keyboard on the Mouse Activity
+     */
     OnClickListener menuEvent = new OnClickListener() {
         public void onClick(View v) {
         	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -62,51 +71,38 @@ public class MouseActivity extends Activity {
         }
     }
 
-    private Context context;
     private KeypadHandler keypadHandler = new KeypadHandler();
     private RelativeLayout layout;
-
-    public static void showSettings(final Activity a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(a);
-        builder.setTitle(R.string.app_name)
-               .setItems(R.array.options, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                switch(which) {
-                case 0:
-                    a.startActivity(new Intent(a.getBaseContext(), Preferences.class));
-                    break;
-
-                case 1:
-                    InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                    imm.showSoftInput((RelativeLayout)a.findViewById(R.id.background), InputMethodManager.SHOW_FORCED);
-                    break;
-
-                case 2:
-                    Network.Connect(Globals.Server);
-                    break;
-                }
-            }
-        });
-        builder.show();
-    }
     
-    // use onPrepareOptionsMenu instead of onCreateOptionsMenu because we need to recreate the menu
-    // each time the button is pressed (as opposed to when this is used with the Action Bar, because
-    // in that case the menu always exists after it is initially created
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-    	showSettings(this);
-    	invalidateOptionsMenu();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mouse_activity_actions, menu);
         return true;
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+  	  switch (item.getItemId()) {
+  	    case R.id.action_mouse:
+  	      startActivity(new Intent(getBaseContext(), MouseActivity.class));
+  	      return true;
+  	    case R.id.reload:
+  	      // since we're on the mouse page, reconnect to the mouse server
+  	      Network.Connect(Globals.Server);
+  	      return true;
+  	    case R.id.action_settings:
+  	    	startActivity(new Intent(getBaseContext(), Preferences.class));
+  	    default:
+  	      return super.onOptionsItemSelected(item);
+  	  }
+  	}    
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setTheme(R.style.AppTheme);
         setContentView(R.layout.main);
-        context = this;
 
         layout = (RelativeLayout)findViewById(R.id.background);
         final Button leftClick = (Button)findViewById(R.id.leftClick);
@@ -131,6 +127,10 @@ public class MouseActivity extends Activity {
         loadPreferences(this);
     }
 
+    /**
+     * Load preferences for use in the application, and scan the network for available servers
+     * @param a the Activity to use
+     */
     public static void loadPreferences(Activity a)
     {
     	// attempt to detect servers again
