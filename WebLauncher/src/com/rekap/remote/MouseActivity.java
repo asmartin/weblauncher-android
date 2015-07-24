@@ -1,5 +1,8 @@
 package com.rekap.remote;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -89,6 +92,7 @@ public class MouseActivity extends Activity {
   	      return true;
   	    case R.id.reload:
   	      // since we're on the mouse page, reconnect to the mouse server
+  	      MainActivity.findServers();
   	      Network.Connect(Globals.Server);
   	      return true;
   	    case R.id.action_settings:
@@ -114,9 +118,6 @@ public class MouseActivity extends Activity {
         leftClick.setOnClickListener(leftEvent);
         rightClick.setOnClickListener(rightEvent);
         menuClick.setOnClickListener(menuEvent);
-
-        loadPreferences(this);
-        Network.LocatorStart();
     }
 
     @Override
@@ -131,17 +132,42 @@ public class MouseActivity extends Activity {
      * Load preferences for use in the application, and scan the network for available servers
      * @param a the Activity to use
      */
-    public static void loadPreferences(Activity a)
+    public static void loadPreferences(final Activity a)
     {
     	// attempt to detect servers again
-    	Network.LocatorStart();
+    	MainActivity.findServers();
     	
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(a.getBaseContext());
 
         Globals.AutoConnect = prefs.getBoolean(Globals.AUTOCONNECT, true);
         Globals.FirstRun = prefs.getBoolean(Globals.FIRSTRUN, true);
         Globals.Sensitivity = ((float)(prefs.getInt(Globals.SENSITIVITY, 50) + 20)) / 100;
-        Globals.Server = prefs.getString(Globals.SERVER, "First");
+        
+        // get the preferred server
+        String preferred = prefs.getString(Globals.SERVER, null);
+        
+        if (preferred == null || !MainActivity.isValidServer(preferred)) {
+        	// either we don't have a preferred server, or the one that is set is inaccessible, so use the first accessible one
+        	Globals.Debugger("Mouse", "Preferred not set or offline, using first accessible");
+        	Globals.Server = Network.GetFirstServer();
+        } else {
+        	// we have a preferred server set and it is accessible, so use it
+        	Globals.Server = preferred;
+        	Globals.Debugger("Mouse", "Using preferred, accessible server");
+        }
+        if (Globals.Server == null) {
+        	Globals.Debugger("Mouse", "No servers found, rescheduling...");
+        	// no preferred or accessible server found, reschedule this action
+    		new Timer().schedule(new TimerTask() {          
+    			@Override
+    			public void run() {
+    				loadPreferences(a);	     
+    			}
+    		}, 1000);	
+        } else {
+        	Globals.Debugger("Mouse", "Mouse Server: " + Globals.Server);
+        }
+        
         Globals.Server_URL = prefs.getString(Globals.SERVER_URL, Globals.Server_URL_Default);
 
         if (Globals.FirstRun) {

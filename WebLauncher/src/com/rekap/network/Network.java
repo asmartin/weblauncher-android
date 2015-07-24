@@ -58,6 +58,10 @@ public class Network extends ScratchEvents {
 		}
 	}
 	
+	public synchronized static String getServerAddress(String Host) {
+		return locator.GetServerAddress(Host);
+	}
+	
 	public synchronized static String[] GetServers()
 	{
 		if (locator != null)
@@ -65,6 +69,21 @@ public class Network extends ScratchEvents {
 			return locator.GetServerNames();
 		}
 		return new String[0];
+	}
+	
+	/**
+	 * return the first server in the list
+	 * @return
+	 */
+	public synchronized static String GetFirstServer() {
+		if (locator != null)
+		{
+			String[] names = locator.GetServerNames();
+			if (names != null && names.length > 0) {
+				return names[0];
+			}
+		}
+		return null;
 	}
 	
 	public synchronized static void CloseConnection()

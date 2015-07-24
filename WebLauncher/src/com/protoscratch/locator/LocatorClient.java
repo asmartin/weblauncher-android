@@ -13,14 +13,17 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.rekap.remote.Globals;
+
 
 public class LocatorClient extends Thread{
 	
 	private int Port;
 	private byte[] Key;
 	private DatagramSocket dSocket;
-	private Map<String, String> servers;
+	private Map<String, String[]> servers;
 	private Timer detectTimer;
+	private long STALE_TIME = 5;	// seconds until a server entry is considered stale (should be removed)
 	
 	TimerTask detectTask = new TimerTask() {
 		@Override
@@ -33,7 +36,15 @@ public class LocatorClient extends Thread{
 	{
 		this.Port = Port;
 		this.Key = Key;
-		servers = new HashMap<String, String>();
+		servers = new HashMap<String, String[]>();
+	}
+	
+	/** 
+	 * returns the epoch time in seconds
+	 * @return the epoch time in seconds
+	 */
+	private long getNow() {
+		return System.currentTimeMillis() / 1000;
 	}
 	
 	public void run()
@@ -67,7 +78,27 @@ public class LocatorClient extends Thread{
 	
 	public synchronized String GetServerAddress(String Name)
 	{
-		return servers.get(Name);
+		try {
+			return servers.get(Name)[0];
+		} catch (NullPointerException npe) {
+			// no mapping found
+			return null;
+		}
+	}
+
+	/**
+	 * returns the time that this entry was added to the list
+	 * @param Name key of the entry
+	 * @return epoch time in seconds when this entry was added
+	 */
+	public synchronized long GetServerTime(String Name)
+	{
+		try {
+			return Long.valueOf(servers.get(Name)[1]);
+		} catch (NumberFormatException nfe) {
+			// return a stale time to get this entry cleared out
+			return getNow() - (STALE_TIME * 2);
+		}
 	}
 	
 	public synchronized String[] GetServerNames()
@@ -78,14 +109,45 @@ public class LocatorClient extends Thread{
 	private void processFrame(String address, byte[] data)
 	{
 		try {
+			// remove any existing stale entries
+			long now = getNow();
+			String[] names = GetServerNames();
+		//	boolean resetGlobal = false;
+			
+			for (String name : names) {
+				if (now - GetServerTime(name) > STALE_TIME) {
+					// entry is stale, remove it
+					Globals.Debugger("Locator", "removing stale: " + name);
+					servers.remove(name);
+					
+					/*if (Globals.Server.equals(name)) {
+						// we need to update the global server since it was using the now stale server
+						resetGlobal = true;
+					}*/
+				}
+			}
+			
+			// refresh the list
+			names = GetServerNames();
+			for (String name : names) {
+				Globals.Debugger("Locator", "valid server: " + name);
+			}
+			Globals.Debugger("Locator", "----------");
+			/*
+			// if we need to update the Globals.Server preference, then do so
+			if (resetGlobal && names != null && names.length > 0) {
+				Globals.Server = names[0];
+			}*/
+			
+			// add this new entry
 			ByteBuffer bbData = ByteBuffer.wrap(data);
 			bbData.order(ByteOrder.BIG_ENDIAN);
 			byte[] rawName = new byte[bbData.getShort()];
 			bbData.get(rawName, 0, rawName.length);
 			String name = new String(rawName, "UTF16");
-			if (!servers.containsKey("First"))
-				servers.put("First", address);
-			servers.put(name, address);
+			//if (!servers.containsKey("First"))
+			//	servers.put("First", new String[]{ address, Long.toString(getNow()) });
+			servers.put(name, new String[]{ address, Long.toString(getNow()) });
 		} catch (UnsupportedEncodingException e) { } //should never happen
 	}
 	
