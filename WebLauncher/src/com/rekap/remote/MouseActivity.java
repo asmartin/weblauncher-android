@@ -167,8 +167,6 @@ public class MouseActivity extends Activity {
         } else {
         	Globals.Debugger("Mouse", "Mouse Server: " + Globals.Server);
         }
-        
-        Globals.Server_URL = prefs.getString(Globals.SERVER_URL, Globals.Server_URL_Default);
 
         if (Globals.FirstRun) {
             SharedPreferences.Editor editor = prefs.edit();

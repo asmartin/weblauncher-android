@@ -128,7 +128,7 @@ public class MainActivity extends Activity {
 			    }
 			}, 2000);
 		} else {
-			if (!Globals.Server_URL.equals("")) {
+			if (Globals.Server_URL != null && !Globals.Server_URL.equals("")) {
 				//	url = Globals.Server_URL;
 					String custom = Globals.Server_URL;
 					url = "http://" + custom.replaceAll("http://", "");

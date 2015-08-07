@@ -9,5 +9,5 @@
         <item >First</item>
     </string-array>
         <string name="TouchBackground">One finger tap: Left-click\nTwo finger tap: Right-click\nTwo finger drag: Scroll\nLong press: Drag</string>
-        <string name="firstruntext">Welcome to Web Launcher! To finish the setup process, visit http://avidandrew.com/weblauncher on your computer to install and configure the server and viewer components.</string>
+        <string name="firstruntext">Welcome to Web Launcher! To finish the setup process, visit http://avidandrew.com/weblauncher on your computer to install and configure the Viewer.</string>
 </resources>

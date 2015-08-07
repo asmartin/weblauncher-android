@@ -5,8 +5,6 @@ import android.util.Log;
 public class Globals {
 	public static boolean DEBUG = false;
 	
-	public static String Server_URL_Default = "http://avidandrew.com/weblauncher";
-	
 	//increment firstrun with each app release
 	public static final String AUTOCONNECT = "autoconnect", SERVER = "server", SERVER_URL = "server_url",
 			SENSITIVITY = "sensitivity", FIRSTRUN = "firstrun1"; 
