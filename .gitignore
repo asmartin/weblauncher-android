@@ -1,2 +1,5 @@
-.metadata/
-Android/.metadata/
+.gradle
+.idea
+app/build
+gradle
+build
