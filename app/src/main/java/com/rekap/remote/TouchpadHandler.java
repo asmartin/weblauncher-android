@@ -50,12 +50,16 @@ public class TouchpadHandler implements OnTouchListener {
 			break;
 			
 		case MotionEvent.ACTION_MOVE:
-			float xOffset = (event.getX() - lastX);
-			float yOffset = (event.getY() - lastY);
+			final float xOffset = (event.getX() - lastX);
+			final float yOffset = (event.getY() - lastY);
 			lastX = event.getX();
 			lastY = event.getY();
 			if (event.getPointerCount() == 1) {
-				NetInput.MoveMouse((int)(xOffset * (5 * Globals.Sensitivity)), (int)(yOffset * (5 * Globals.Sensitivity)));
+				new Thread(new Runnable() {
+					public void run() {
+						NetInput.MoveMouse((int)(xOffset * (5 * Globals.Sensitivity)), (int)(yOffset * (5 * Globals.Sensitivity)));
+					}
+				}).start();
 			} else { //2 or more touches down
 				if (lastScrollY ==0) {
 					lastScrollY = lastY;

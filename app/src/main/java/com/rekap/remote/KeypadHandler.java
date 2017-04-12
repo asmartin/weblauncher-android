@@ -19,7 +19,13 @@ public class KeypadHandler implements OnKeyListener{
 		case KeyEvent.ACTION_MULTIPLE:
 			if (keyCode == KeyEvent.KEYCODE_UNKNOWN)
 			{
-				NetInput.SendKeySequence(event.getCharacters());
+				final String sequence = event.getCharacters();
+				new Thread(new Runnable() {
+					public void run() {
+						NetInput.SendKeySequence(sequence);
+					}
+				}).start();
+
 			}
 			else
 			{
@@ -33,20 +39,32 @@ public class KeypadHandler implements OnKeyListener{
 		return false;
 	}
 	
-	private void SendKeyCode(int keyCode, char UnicodeChar)
+	private void SendKeyCode(int keyCode, final char UnicodeChar)
 	{
 		switch (keyCode)
 		{
 		case KeyEvent.KEYCODE_DEL:
-			NetInput.SendKeycode(8);
+			new Thread(new Runnable() {
+				public void run() {
+					NetInput.SendKeycode(8);
+				}
+			}).start();
 			break;
 			
 		case KeyEvent.KEYCODE_ENTER:
-			NetInput.SendKeycode(13);
+			new Thread(new Runnable() {
+				public void run() {
+					NetInput.SendKeycode(13);
+				}
+			}).start();
 			break;
 		
 		default:
-			NetInput.SendKeySequence(new String() + UnicodeChar);
+			new Thread(new Runnable() {
+				public void run() {
+					NetInput.SendKeySequence(new String() + UnicodeChar);
+				}
+			}).start();
 			break;
 		}
 	}
