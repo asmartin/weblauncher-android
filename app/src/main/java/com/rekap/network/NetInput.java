@@ -83,11 +83,15 @@ public final class NetInput {
         SendMessage(new ScratchMessage(Primary, Secondary));
     }
 
-    private static void SendMessage(ScratchMessage message) {
-        ScratchEvents client = Network.getClient();
-        if (client != null) {
-            client.Send(message);
-        } else
-            Network.Connect();
+    private static void SendMessage(final ScratchMessage message) {
+        new Thread(new Runnable() {
+            public void run() {
+                ScratchEvents client = Network.getClient();
+                if (client != null) {
+                    client.Send(message);
+                } else
+                    Network.Connect();
+            }
+        }).start();
     }
 }
