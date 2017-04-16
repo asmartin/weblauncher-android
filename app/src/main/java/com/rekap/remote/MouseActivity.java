@@ -31,11 +31,7 @@ public class MouseActivity extends Activity {
 	 */
     OnClickListener leftEvent = new OnClickListener() {
         public void onClick(View v) {
-            new Thread(new Runnable() {
-                public void run() {
-                    NetInput.LeftClick();
-                }
-            }).start();
+            NetInput.LeftClick();
         }
     };
 
@@ -44,11 +40,7 @@ public class MouseActivity extends Activity {
      */
     OnClickListener rightEvent = new OnClickListener() {
         public void onClick(View v) {
-            new Thread(new Runnable() {
-                public void run() {
-                    NetInput.RightClick();
-                }
-            }).start();
+            NetInput.RightClick();
         }
     };
 
@@ -69,20 +61,12 @@ public class MouseActivity extends Activity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            NetInput.VolumeUp();
-                        }
-                    }).start();
+                    NetInput.VolumeUp();
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_DOWN) {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            NetInput.VolumeDown();
-                        }
-                    }).start();
+                    NetInput.VolumeDown();
                 }
                 return true;
             default:
