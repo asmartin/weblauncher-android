@@ -1,4 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/action_wol"
+        android:icon="@drawable/power"
+        android:title="@string/action_wol"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_mouse"
           android:icon="@drawable/mouse"
           android:title="@string/action_mouse"

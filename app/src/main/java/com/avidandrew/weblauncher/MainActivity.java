@@ -20,13 +20,8 @@ import android.webkit.WebViewClient;
 
 import com.rekap.network.Network;
 import com.rekap.remote.*;
+import tk.nfsmonstr.simplewakeonlan.*;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
 public class MainActivity extends Activity {
 	private WebView myWebView = null;
 	private final String APP = "Web Launcher";
@@ -38,7 +33,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_weblauncher);
         
         MouseActivity.loadPreferences(this);
-        
+
+		getActionBar().show();
+
         myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -71,6 +68,9 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	  switch (item.getItemId()) {
+    	  	case R.id.action_wol:
+				  startActivity(new Intent(getBaseContext(), WOLActivity.class));
+				  return true;
     	    case R.id.action_mouse:
     	      startActivity(new Intent(getBaseContext(), MouseActivity.class));
     	      return true;
