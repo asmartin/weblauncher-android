@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
-                android:title="General Settings">
+                android:title="Configure Viewer">
                 <CheckBoxPreference
-                        android:title="Auto-Connect"
-                        android:defaultValue="true"
-                        android:summary="Attempt to auto-connect to viewer"
+                        android:title="Auto-Discover"
+                        android:defaultValue="false"
+                        android:summary="Attempt to auto-discover available viewers and connect to the first one discovered"
                         android:key="autoconnect" />
                 <ListPreference
-                        android:title="Select Viewer"
-                        android:summary="Choose default viewer to connect to"
+                        android:title="Select Discovered Viewer"
+                        android:summary="Select which auto-discovered viewer to use"
                         android:key="server"
                         android:defaultValue="First"
                         android:entries="@array/server_pref"
                         android:entryValues="@array/server_pref" />
                  <EditTextPreference
-                		android:title="Custom Server URL"
-						android:summary="Enter a custom location for the weblauncher-server component (e.g if hosted on another computer on the network). Otherwise, leave this blank to auto-detect"	    
-                 		android:inputType="textUri"
+                		android:title="Custom Viewer"
+						android:summary="Enter a custom hostname if not using auto-discover or WOL"
 					    android:key="server_url"
 					    android:defaultValue="" />
         </PreferenceCategory>
-        <PreferenceCategory android:title="Input">
+        <PreferenceCategory android:title="Mouse">
             <com.rekap.remote.SeekBarPreference android:key="sensitivity"
         		android:title="Mouse sensitivity"
         		android:summary="Modify the mouse sensitive"

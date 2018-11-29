@@ -28,7 +28,7 @@ import android.widget.ToggleButton;
 import com.avidandrew.weblauncher.R;
 import android.app.Activity;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

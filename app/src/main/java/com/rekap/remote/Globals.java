@@ -10,9 +10,11 @@ public class Globals {
 			SENSITIVITY = "sensitivity", FIRSTRUN = "firstrun1"; 
 	
 	public static boolean AutoConnect, FirstRun;
-	public static String Server;		// weblauncher-viewer (where mouse server is running)
-	public static String Server_URL;	// weblauncher-server (where links webpage is hosted)
+	public static String Server;		// selected server from auto-discovered list
+	public static String Server_URL;	// custom server hostname
+	public static String WOL_Server = null; // selected WOL server hostname
 	public static float Sensitivity;	// how sensitive the mouse should be
+	
 	
 	/**
 	 * Logging function that logs messages if the DEBUG flag is set

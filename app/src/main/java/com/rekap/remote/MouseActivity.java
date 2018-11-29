@@ -142,6 +142,7 @@ public class MouseActivity extends Activity {
         Globals.AutoConnect = prefs.getBoolean(Globals.AUTOCONNECT, true);
         Globals.FirstRun = prefs.getBoolean(Globals.FIRSTRUN, true);
         Globals.Sensitivity = ((float)(prefs.getInt(Globals.SENSITIVITY, 50) + 20)) / 100;
+        Globals.Server_URL = prefs.getString(Globals.SERVER_URL, "");
         
         // get the preferred server
         String preferred = prefs.getString(Globals.SERVER, null);

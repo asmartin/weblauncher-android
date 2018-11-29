@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.avidandrew.weblauncher.R;
+import com.rekap.remote.Globals;
 
 import java.util.ArrayList;
 
@@ -71,6 +73,7 @@ public class WOLActivity extends AppCompatActivity {
         servers_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Globals.WOL_Server = name.get(position);
                 new SendMagicPacket(mActivity,ip.get(position),mac.get(position),port.get(position),broadcast.get(position)).execute();
             }
         });
@@ -98,24 +101,6 @@ public class WOLActivity extends AppCompatActivity {
     protected void onResume() {
         setupServerList();
         super.onResume();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_about:
-                startActivity(new Intent(mActivity,AboutActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
