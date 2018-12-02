@@ -24,9 +24,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.Button;
 import com.avidandrew.weblauncher.R;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -34,17 +36,15 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        ToggleButton showLicense = findViewById(R.id.showLicense);
-        final TextView license = findViewById(R.id.licenseText);
-        license.setText(getText(R.string.license));
-        showLicense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    license.setVisibility(View.VISIBLE);
-                } else {
-                    license.setVisibility(View.INVISIBLE);
-                }
+        TextView version = (TextView)findViewById(R.id.versionText);
+        version.setText("Version: " + getResources().getString(R.string.version));
+        Button showLicense = (Button)findViewById(R.id.showLicense);
+        showLicense.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://www.gnu.org/licenses"));
+                startActivity(browserIntent);
             }
         });
     }

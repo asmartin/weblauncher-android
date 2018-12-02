@@ -48,16 +48,9 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/editText2"
+                    android:id="@+id/versionText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Version:" />
-
-                <TextView
-                    android:id="@+id/version"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/version"/>
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -75,27 +68,19 @@
                     android:orientation="vertical" >
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/textViewVersion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_2" />
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <ToggleButton
+            <Button
                 android:id="@+id/showLicense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:textOff="@string/about_showLicense"
-                android:textOn="@string/about_hideLicense" />
-
-            <TextView
-                android:id="@+id/licenseText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxEms="20"
-                android:visibility="invisible"/>
+                android:text="@string/about_showLicense" />
         </LinearLayout>
 
     </ScrollView>
