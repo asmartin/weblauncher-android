@@ -66,7 +66,7 @@ public class WOLActivity extends AppCompatActivity {
             ip.add(sharedPreferences.getString("server-ip-".concat(String.valueOf(i)),""));
             mac.add(sharedPreferences.getString("server-mac-".concat(String.valueOf(i)),""));
             port.add(sharedPreferences.getInt("server-port-".concat(String.valueOf(i)),0));
-            broadcast.add(sharedPreferences.getBoolean("server-broad-".concat(String.valueOf(i)),false));
+            broadcast.add(sharedPreferences.getBoolean("server-broad-".concat(String.valueOf(i)),true));
         }
         serverListAdapter = new ServerListAdapter(this,name,ip,port,mac,broadcast);
         servers_list.setAdapter(serverListAdapter);

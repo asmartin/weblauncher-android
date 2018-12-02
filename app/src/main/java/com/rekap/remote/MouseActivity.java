@@ -76,32 +76,7 @@ public class MouseActivity extends Activity {
 
     private KeypadHandler keypadHandler = new KeypadHandler();
     private RelativeLayout layout;
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mouse_activity_actions, menu);
-        return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-  	  switch (item.getItemId()) {
-  	    case R.id.action_mouse:
-  	      startActivity(new Intent(getBaseContext(), MouseActivity.class));
-  	      return true;
-  	    case R.id.reload:
-  	      // since we're on the mouse page, reconnect to the mouse server
-  	      MainActivity.findServers();
-  	      Network.Connect(Globals.Server);
-  	      return true;
-  	    case R.id.action_settings:
-  	    	startActivity(new Intent(getBaseContext(), Preferences.class));
-  	    default:
-  	      return super.onOptionsItemSelected(item);
-  	  }
-  	}    
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,40 +109,12 @@ public class MouseActivity extends Activity {
      */
     public static void loadPreferences(final Activity a)
     {
-    	// attempt to detect servers again
-    	MainActivity.findServers();
-    	
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(a.getBaseContext());
 
         Globals.AutoConnect = prefs.getBoolean(Globals.AUTOCONNECT, true);
         Globals.FirstRun = prefs.getBoolean(Globals.FIRSTRUN, true);
         Globals.Sensitivity = ((float)(prefs.getInt(Globals.SENSITIVITY, 50) + 20)) / 100;
         Globals.Server_URL = prefs.getString(Globals.SERVER_URL, "");
-        
-        // get the preferred server
-        String preferred = prefs.getString(Globals.SERVER, null);
-        
-        if (preferred == null || !MainActivity.isValidServer(preferred)) {
-        	// either we don't have a preferred server, or the one that is set is inaccessible, so use the first accessible one
-        	Globals.Debugger("Mouse", "Preferred not set or offline, using first accessible");
-        	Globals.Server = Network.GetFirstServer();
-        } else {
-        	// we have a preferred server set and it is accessible, so use it
-        	Globals.Server = preferred;
-        	Globals.Debugger("Mouse", "Using preferred, accessible server");
-        }
-        if (Globals.Server == null) {
-        	Globals.Debugger("Mouse", "No servers found, rescheduling...");
-        	// no preferred or accessible server found, reschedule this action
-    		new Timer().schedule(new TimerTask() {          
-    			@Override
-    			public void run() {
-    				loadPreferences(a);	     
-    			}
-    		}, 1000);	
-        } else {
-        	Globals.Debugger("Mouse", "Mouse Server: " + Globals.Server);
-        }
 
         if (Globals.FirstRun) {
             SharedPreferences.Editor editor = prefs.edit();

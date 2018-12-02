@@ -14,6 +14,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
+import android.net.wifi.WifiManager;
+import android.net.DhcpInfo;
+import com.rekap.remote.Globals;
 
 /**
  * Created by nfs_monstr on 07.01.18.
@@ -34,6 +37,23 @@ public class SendMagicPacket extends AsyncTask<Void,Void,Byte> {
         this.mac = mac.toUpperCase().replaceAll(":","").replaceAll("-","");
         this.port = port;
         this.broadcast = broadcast;
+        if (Globals.DEBUG)
+            Log.d("WebLauncher", "ip: "+ this.ip + "; mac: " + this.mac + "; port: " + this.port + "; broadcast: " + this.broadcast);
+    }
+
+    private InetAddress getBroadcastAddress() throws IOException {
+        WifiManager myWifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+        DhcpInfo myDhcpInfo = myWifiManager.getDhcpInfo();
+        if (myDhcpInfo == null) {
+            // Could not get broadcast address
+            return null;
+        }
+        int broadcast = (myDhcpInfo.ipAddress & myDhcpInfo.netmask)
+                | ~myDhcpInfo.netmask;
+        byte[] quads = new byte[4];
+        for (int k = 0; k < 4; k++)
+            quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+        return InetAddress.getByAddress(quads);
     }
 
     @Override
@@ -49,15 +69,31 @@ public class SendMagicPacket extends AsyncTask<Void,Void,Byte> {
             for (int i=0; i<16; i++) {
                 System.arraycopy(macBuff,0,buffer,6+6*i,6);
             }
+
+            // send to IP address
             InetAddress inetAddress = InetAddress.getByName(ip);
-            datagramSocket.setBroadcast(broadcast);
             datagramSocket.connect(inetAddress,port);
             DatagramPacket datagramPacket = new DatagramPacket(buffer,buffer.length,inetAddress,port);
             datagramSocket.send(datagramPacket);
             datagramSocket.close();
+
+            // send to broadcast address
+            if (broadcast) {
+                InetAddress bcast = getBroadcastAddress();
+                if (bcast == null) {
+                    throw new Exception("cannot get broadcast address");
+                }
+                datagramSocket = new DatagramSocket();
+                datagramSocket.setBroadcast(broadcast);
+                datagramSocket.connect(bcast, port);
+                datagramPacket = new DatagramPacket(buffer, buffer.length, bcast, port);
+                datagramSocket.send(datagramPacket);
+                datagramSocket.close();
+            }
         } catch (Exception e) {
             msg = e.getMessage();
-            Log.d("SimpleWakeOnLan", "SendMagicPacket: "+msg);
+            if (Globals.DEBUG)
+              Log.d("WebLauncher", "SendMagicPacket: " + msg);
             return 1;
         }
         return 0;

@@ -33,6 +33,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.avidandrew.weblauncher.R;
+import com.rekap.remote.Globals;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -157,7 +158,7 @@ public class AddOrEditServerActivity extends Activity {
                     ip = sharedPreferences.getString("server-ip-".concat(String.valueOf(number)),"");
                     mac = sharedPreferences.getString("server-mac-".concat(String.valueOf(number)),"");
                     port = sharedPreferences.getInt("server-port-".concat(String.valueOf(number)),0);
-                    broadcast = sharedPreferences.getBoolean("server-broad-".concat(String.valueOf(number)),false);
+                    broadcast = sharedPreferences.getBoolean("server-broad-".concat(String.valueOf(number)),true);
                     nameEdit.setText(name);
                     ipEdit.setText(ip);
                     if (port==0)
@@ -192,7 +193,8 @@ public class AddOrEditServerActivity extends Activity {
                     mac = getMacFromArpCache(ip);
                 }
 
-                Log.d("SimpleWakeOnLan", "ip: " + ip + "; mac: " + mac);
+                if (Globals.DEBUG)
+                    Log.d("WebLauncher", "ip: " + ip + "; mac: " + mac);
 
                 if (allFieldsAreCorrect(name, ip, mac, port)) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();

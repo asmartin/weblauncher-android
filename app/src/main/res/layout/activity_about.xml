@@ -23,7 +23,7 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -35,15 +35,35 @@
                     android:layout_marginStart="18dp"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="18dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@string/about_1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             </RelativeLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/editText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Version:" />
+
+                <TextView
+                    android:id="@+id/version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/version"/>
+
+            </TableRow>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="45dp" />
+                android:layout_height="15dp" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"

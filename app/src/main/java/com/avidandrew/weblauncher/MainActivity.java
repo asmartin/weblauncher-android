@@ -28,14 +28,13 @@ import tk.nfsmonstr.simplewakeonlan.*;
 public class MainActivity extends Activity {
 	private WebView myWebView = null;
 	private final String APP = "Web Launcher";
+	private int reloadDelay = 10000; // number of ms to wait before attempting to reload the page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_weblauncher);
-
-        MouseActivity.loadPreferences(this);
 
 		getActionBar().show();
 
@@ -83,6 +82,7 @@ public class MainActivity extends Activity {
     	      return true;
     	    case R.id.action_settings:
     	    	startActivity(new Intent(getBaseContext(), Preferences.class));
+    	    	return true;
 			  case R.id.menu_about:
 				  startActivity(new Intent(getBaseContext(), AboutActivity.class));
 				  return true;
@@ -96,7 +96,6 @@ public class MainActivity extends Activity {
      * Kicks off the locator process to look for available servers
      */
     public static void findServers() {
-		Log.d("WebLauncher", "findServers");
     	Network.LocatorStart();
     }
 
@@ -106,8 +105,6 @@ public class MainActivity extends Activity {
      * @return true if it is still valid and accessible, false otherwise
      */
     public static boolean isValidServer(String name) {
-		Log.d("WebLauncher", "isValidServer");
-        	findServers();
         	String[] servers = Network.GetServers();
         	for (String s : servers) {
         		if (s.equals(name)) {
@@ -122,31 +119,35 @@ public class MainActivity extends Activity {
      */
 	private void reloadPage() {
 		String url = null;
+		MouseActivity.loadPreferences(this);
+		findServers();
 
-		Log.d("WebLauncher", "settings Server_URL: " + Globals.Server_URL);
-		//Log.d("WebLauncher", "settings SERVER_URL: " + Globals.SERVER_URL);
-		Log.d("WebLauncher", "settings Server: " + Globals.Server);
-		Log.d("WebLauncher", "settings AutoConnect: " + Globals.AutoConnect);
-		Log.d("WebLauncher", "settings WOL_Server: " + Globals.WOL_Server);
+		if (Globals.DEBUG) {
+			Log.d("WebLauncher", "settings Server_URL: " + Globals.Server_URL);
+			Log.d("WebLauncher", "settings Server: " + Globals.Server);
+			Log.d("WebLauncher", "settings AutoConnect: " + Globals.AutoConnect);
+			Log.d("WebLauncher", "settings WOL_Server: " + Globals.WOL_Server);
+		}
 		if (Globals.Server_URL != null && !Globals.Server_URL.equals("")) {
-			Log.d("WebLauncher", "custom: " + Globals.Server_URL);
 			// custom server is defined, use it
 			String custom = Globals.Server_URL;
 			url = "http://" + custom.replaceAll("http://", "");
 		} else if (Globals.WOL_Server != null) {
-			Log.d("WebLauncher", "wol: " + Globals.WOL_Server);
 			// a WOL server was selected, use it
 			url = "http://" + Globals.WOL_Server;
 		} else if (Globals.AutoConnect) {
-			Log.d("WebLauncher", "auto-connect, searching...");
+			if (Globals.DEBUG)
+				Log.d("WebLauncher", "auto-connect, searching...");
 			if (isValidServer(Globals.Server)) {
-				Log.d("WebLauncher", "auto-connect selected: " + Globals.Server);
+				if (Globals.DEBUG)
+					Log.d("WebLauncher", "auto-connect selected: " + Globals.Server);
 				url = "http://" + Globals.Server;
 			} else {
 				String firstServer = Network.GetFirstServer();
 				if (firstServer == null) {
 					// no auto-discovered servers, error
-					Log.d("WebLauncher", "auto-connect: no auto-discovered servers");
+					if (Globals.DEBUG)
+						Log.d("WebLauncher", "auto-connect: no auto-discovered servers");
 					final Context parent = this;
 					this.runOnUiThread(new Runnable() {
 						public void run() {
@@ -156,17 +157,18 @@ public class MainActivity extends Activity {
 								public void run() {
 									reloadPage();
 								}
-							}, 8000);
+							}, reloadDelay);
 						}
 					});
 				} else {
-					Log.d("WebLauncher", "auto-connect first server:" + firstServer);
+					if (Globals.DEBUG)
+						Log.d("WebLauncher", "auto-connect first server:" + firstServer);
+					Globals.Server = firstServer;
 					url = "http://" + firstServer;
 				}
 			}
 		} else {
 			// no servers specified, suggest using auto-discover
-			Log.d("WebLauncher", "no servers specified");
 			final Context parent = this;
 			this.runOnUiThread(new Runnable() {
 				public void run() {
@@ -177,7 +179,8 @@ public class MainActivity extends Activity {
 
 		if (url != null) {
 			// a valid URL was found, try to load it
-			Globals.Debugger("Weblauncher", "URL: " + url);
+			if (Globals.DEBUG)
+				Globals.Debugger("Weblauncher", "URL: " + url);
 			final String finalUrl = url;
 			final Context parent = this;
 			this.runOnUiThread(new Runnable() {
@@ -197,7 +200,6 @@ public class MainActivity extends Activity {
     {
         super.onResume();
 
-        MouseActivity.loadPreferences(this);
         reloadPage();
     }
 
@@ -234,7 +236,6 @@ public class MainActivity extends Activity {
     	protected String doInBackground(String... params) {
     		tryURL = params[0];
 
-    		//publishProgress("Sleeping..."); // Calls onProgressUpdate()
     		try {
     			// check if the webpage is accessible
     			response = isWebpageAccessible(tryURL);
