@@ -26,9 +26,13 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Button;
 import com.avidandrew.weblauncher.R;
+import com.rekap.remote.Globals;
+import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -37,7 +41,13 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         TextView version = (TextView)findViewById(R.id.versionText);
-        version.setText("Version: " + getResources().getString(R.string.version));
+        try {
+            PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version.setText("Version: " + pinfo.versionName);
+        } catch(NameNotFoundException exp) {
+            if (Globals.DEBUG)
+                Log.d("WebLauncher", "could not read package name from AndroidManifest.xml");
+        }
         Button showLicense = (Button)findViewById(R.id.showLicense);
         showLicense.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
