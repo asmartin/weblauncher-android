@@ -5,6 +5,7 @@ import com.protoscratch.common.ScratchEvents;
 import com.protoscratch.common.ScratchMessage;
 import com.protoscratch.locator.LocatorClient;
 import com.rekap.remote.Globals;
+import tk.nfsmonstr.simplewakeonlan.AddOrEditServerActivity;
 
 public class Network extends ScratchEvents {
 
@@ -54,7 +55,13 @@ public class Network extends ScratchEvents {
 			ScratchClient client = new ScratchClient(Network.class, 28532);
 			client.setKey(0x3FB3BFEF);
 			client.setVersion((byte)1,(byte)0);
-			client.Connect(locator.GetServerAddress(Host));
+			if (locator == null) {
+				String ip = AddOrEditServerActivity.getIPFromHostname(Host);
+				if (ip != null)
+					client.Connect(ip);
+;			} else {
+				client.Connect(locator.GetServerAddress(Host));
+			}
 		}
 	}
 	

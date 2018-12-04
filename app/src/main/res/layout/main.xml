@@ -45,6 +45,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="59dp"
         android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
         android:text="@string/TouchBackground"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

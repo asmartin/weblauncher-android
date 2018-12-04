@@ -87,7 +87,7 @@ public class AddOrEditServerActivity extends Activity {
 
     }
 
-    private static String getIPFromHostname(String hostname) {
+    public static String getIPFromHostname(String hostname) {
         InetAddress address = null;
 
         address = getInetAddressByName(hostname);

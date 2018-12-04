@@ -4,7 +4,7 @@
                 android:title="Configure Viewer">
                 <CheckBoxPreference
                         android:title="Auto-Discover"
-                        android:defaultValue="false"
+                        android:defaultValue="true"
                         android:summary="Attempt to auto-discover available viewers and connect to the first one discovered"
                         android:key="autoconnect" />
                 <ListPreference

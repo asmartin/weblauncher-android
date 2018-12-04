@@ -28,7 +28,7 @@ import tk.nfsmonstr.simplewakeonlan.*;
 public class MainActivity extends Activity {
 	private WebView myWebView = null;
 	private final String APP = "Web Launcher";
-	private int reloadDelay = 10000; // number of ms to wait before attempting to reload the page
+	private int autoDetectDelay = 5000; // number of ms to wait before looking at the list of auto-discovered servers
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +114,53 @@ public class MainActivity extends Activity {
         	return false;
     }
 
+    private void loadUrl(String url) {
+        if (url != null) {
+            // a valid URL was found, try to load it
+            if (Globals.DEBUG)
+                Globals.Debugger("Weblauncher", "URL: " + url);
+            final String finalUrl = url;
+            final Context parent = this;
+            this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(parent, "Loading " + finalUrl, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // load the URL, or if it isn't available an error page
+            final URLChecker loader = new URLChecker();
+            loader.execute(url);
+        }
+    }
+
+    private void autoDetectServers() {
+        String firstServer = Network.GetFirstServer();
+        if (firstServer == null) {
+            // no auto-discovered servers, error
+            if (Globals.DEBUG)
+                Log.d("WebLauncher", "auto-connect: no auto-discovered servers");
+            final Context parent = this;
+            this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(parent,"No auto-discovered viewers found; use 'Refresh' from the menu to retry ",Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            if (Globals.DEBUG)
+                Log.d("WebLauncher", "auto-connect first server:" + firstServer);
+            Globals.Server = firstServer;
+            String url = "http://" + firstServer;
+            Network.Connect(Globals.Server);
+            loadUrl(url);
+        }
+    }
+
     /**
      * Reload the webpage
      */
 	private void reloadPage() {
 		String url = null;
 		MouseActivity.loadPreferences(this);
-		findServers();
 
 		if (Globals.DEBUG) {
 			Log.d("WebLauncher", "settings Server_URL: " + Globals.Server_URL);
@@ -132,40 +172,29 @@ public class MainActivity extends Activity {
 			// custom server is defined, use it
 			String custom = Globals.Server_URL;
 			url = "http://" + custom.replaceAll("http://", "");
+			Network.Connect(Globals.Server_URL);
 		} else if (Globals.WOL_Server != null) {
 			// a WOL server was selected, use it
 			url = "http://" + Globals.WOL_Server;
+            Network.Connect(Globals.WOL_Server);
 		} else if (Globals.AutoConnect) {
+			findServers();
+
 			if (Globals.DEBUG)
 				Log.d("WebLauncher", "auto-connect, searching...");
 			if (isValidServer(Globals.Server)) {
 				if (Globals.DEBUG)
 					Log.d("WebLauncher", "auto-connect selected: " + Globals.Server);
 				url = "http://" + Globals.Server;
+                Network.Connect(Globals.Server);
 			} else {
-				String firstServer = Network.GetFirstServer();
-				if (firstServer == null) {
-					// no auto-discovered servers, error
-					if (Globals.DEBUG)
-						Log.d("WebLauncher", "auto-connect: no auto-discovered servers");
-					final Context parent = this;
-					this.runOnUiThread(new Runnable() {
-						public void run() {
-							Toast.makeText(parent,"No auto-discovered viewers found; will retry shortly... ",Toast.LENGTH_LONG).show();
-							new Timer().schedule(new TimerTask() {
-								@Override
-								public void run() {
-									reloadPage();
-								}
-							}, reloadDelay);
-						}
-					});
-				} else {
-					if (Globals.DEBUG)
-						Log.d("WebLauncher", "auto-connect first server:" + firstServer);
-					Globals.Server = firstServer;
-					url = "http://" + firstServer;
-				}
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // wait for servers to be found and then try to load the first one found
+                        autoDetectServers();
+                    }
+                }, autoDetectDelay);
 			}
 		} else {
 			// no servers specified, suggest using auto-discover
@@ -177,22 +206,7 @@ public class MainActivity extends Activity {
 			});
 		}
 
-		if (url != null) {
-			// a valid URL was found, try to load it
-			if (Globals.DEBUG)
-				Globals.Debugger("Weblauncher", "URL: " + url);
-			final String finalUrl = url;
-			final Context parent = this;
-			this.runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(parent, "Loading " + finalUrl, Toast.LENGTH_SHORT).show();
-				}
-			});
-
-			// load the URL, or if it isn't available an error page
-			final URLChecker loader = new URLChecker();
-			loader.execute(url);
-		}
+		loadUrl(url);
 	}
 
     @Override
